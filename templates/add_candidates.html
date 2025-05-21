@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>候補時間選択(週・曜日ごと)</title>
+</head>
+<body>
+    <h1>候補時間選択フォーム</h1>
+
+    {% if message %}
+        <p>{{message}}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% for week, days in templates.items() %}
+            <fieldset style="border: 2px solid #333; margin-bottom: 20px; padding: 10px;">
+                <legend><strong>{{week}}</strong></legend>
+
+                {% for day, times in days.items() %}
+                    <fieldset style="margin-left: 20px; border: 1px solid #aaa; padding: 5px;">
+                        <legend>{{day}}</legend>
+                        {% for time in times %}
+                            <label>
+                                <input type="checkbox" name="{{week}}__{{day}}" value="{{time}}">
+                                {{time}}
+                            </label><br>
+                        {% endfor %}
+                    </fieldset>
+                {% endfor %}
+            </fieldset>
+        {% endfor %}
+
+        <button type="submit">保存</button>
+    </form>
+</body>
+</html>
