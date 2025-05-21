@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>可用性の提出</title>
+</head>
+<body>
+    <h1>参加可能な日時を選んでください</h1>
+    {% if message %}
+        <p>{{message}}</p>
+    {% endif %}
+    <form method="POST">
+        <label>名前:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        {% for week, day in candidates.items() %}
+            <h3>{{week}}</h3>
+            {% for day, times in days.items() %}
+                <strong>{{day}}</strong><br>
+                {% for time in times %}
+                    <input type="checkbox" name="{{week}}__{{day}}" value="{{time}}">
+                    {{time}}<br>
+                {% endfor %}
+                <br>
+            {% endfor %}
+        {% endfor %}
+
+        <button type="submit">送信</button>
+    </form>
+</body>
+</html>

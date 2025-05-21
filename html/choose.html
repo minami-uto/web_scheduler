@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>希望日の選択</title>
+</head>
+<body>
+    <h1>希望日時を選択してください</h1>
+
+    {% if message %}
+        <p>{{message}}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>名前: </label><br>
+        <input type="text" name="name" required><br><br>
+
+        {% for week, days in candidates.items() %}
+            <h3>{{week}}</h3>
+            {% for day, times in days.items() %}
+                <strong>{{day}}</strong><br>
+                {% for time in times %}
+                    <label>
+                       <input type="checkbox" name="choice" value="{{week}}__{{day}}__{{time}}">
+                       {{time}}
+                    </label><br>
+                {% endfor %}
+                <br>
+            {% endfor %}
+        {% endfor %}
+
+        <button type="submit">送信</button>
+    </form>
+</body>
+</html>
