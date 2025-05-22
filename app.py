@@ -170,6 +170,25 @@ def export_csv():
     #レスポンスとしてCSVファイルを返す
     return Response(csv_data, mimetype='text/csv', headers={'Content-Disposition': 'attachment;filename=availability_sammary.csv'})
 
+@app.route('/download_csv')
+def download_csv():
+    responses = load_responses()
+    candidates = load_json(CANDIDATES_FILE)
+
+    count_dict = {} #集計辞書を作成
+    for name, choices in responses.items():
+        for choice in choices:
+            if choice not in count_dict:
+                count_dict[choice] = []
+            count_dict[choice].append(name)
+    
+    def generate():
+        yield '日時,希望者数,名前一覧\n'
+        for datetime, names in count_dict.items():
+            line = f'{datetime},{len(names)},"{"、".join(names)}"\n'
+            yield line
+
+    return Response(generate(), mimetype='text/csv', headers={"Content-Diposition": "attachment;filename=希望日時集計.csv"})
 
 if __name__ == '__main__':
     app.run(debug=True)
