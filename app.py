@@ -109,6 +109,29 @@ def submit_availability():
             return render_template('submit_availability.html', candidates=candidates, message="名前と時間を選んでください")
     return render_template('submit_availability.html', candidates=candidates) 
 
+@app.route('/view_responses')
+def view_responses():
+    candidates = load_json(CANDIDATES_FILE)
+    responses = load_responses()
+
+    summary = {} #各日時に対して希望者の数をカウントする辞書
+
+    for name, choices in responses.items():
+        if isinstance(choices, dict): #submit_availability形式のデータ
+            for week, days in choices.items():
+                for day, times in days.items():
+                    for time in times:
+                        key = f"{week}__{day}__{time}"
+                        if key not in summary:
+                            summary[key] = []
+                        summary[key].append(name)
+        elif isinstance(choices, list): #choose形式のデータ
+            for key in choices:
+                if key not in summary:
+                    summary[key] = []
+                summary[key].append(name)
+
+    return render_template('view_responses.html', summary=summary, responses=responses, candidates=candidates)
 
 if __name__ == '__main__':
     app.run(debug=True)

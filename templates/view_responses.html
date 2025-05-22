@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>希望日時集計</title>
+</head>
+<body>
+    <h1>希望日時の集計</h1>
+
+    <h2>各日時の希望者数</h2>
+    <ul>
+        {% for datetime, names in summary.items() %}
+            <li><strong>{{datetime}}:</strong>{{names|length}}人 - {{names|join(', ')}}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>受講生ごとの希望</h2>
+    <ul>
+        {% for name, choices in responses.items() %}
+            <li><strong>{{name}}:</strong> {{choices|join(', ')}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
