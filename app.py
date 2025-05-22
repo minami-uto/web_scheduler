@@ -40,14 +40,14 @@ def add_candidates():
 
     if request.method == 'POST':
         selected = {}
-        for week, days in templates.items():
+        for session, days in templates.items():
             for day in days:
-                key = f"{week}__{day}"
+                key = f"{session}__{day}"
                 times = request.form.getlist(key)
                 if times:
-                    if week not in selected:
-                        selected[week] = {}
-                    selected[week][day] = times
+                    if session not in selected:
+                        selected[session] = {}
+                    selected[session][day] = times
 
         if selected:
             save_json(selected, CANDIDATES_FILE)
@@ -93,14 +93,14 @@ def submit_availability():
     if request.method == 'POST':
         name = request.form.get('name')
         responses = {}
-        for week, days in candidates.items():
+        for session, days in candidates.items():
             for day, times in days.items():
-                key = f"{week}__{day}"
+                key = f"{session}__{day}"
                 selected_times = request.form.getlist(key)
                 if selected_times:
-                    if week not in responses:
-                        responses[week] = {}
-                    responses[week][day] = selected_times
+                    if session not in responses:
+                        responses[session] = {}
+                    responses[session][day] = selected_times
         if name and responses: #保存処理
             filename = f"responses_{name}.json"
             save_json(responses, filename)
@@ -118,10 +118,10 @@ def view_responses():
 
     for name, choices in responses.items():
         if isinstance(choices, dict): #submit_availability形式のデータ
-            for week, days in choices.items():
+            for session, days in choices.items():
                 for day, times in days.items():
                     for time in times:
-                        key = f"{week}__{day}__{time}"
+                        key = f"{session}__{day}__{time}"
                         if key not in summary:
                             summary[key] = []
                         summary[key].append(name)

@@ -1,0 +1,14 @@
+候補時間選択フォーム
+http://127.0.0.1:5000/add_candidates
+
+希望日時の選択フォーム
+http://127.0.0.1:5000/choose
+
+希望日時の選択フォーム（試作2）
+http://127.0.0.1:5000/submit_availability
+
+希望日時の選択フォーム（試作1）
+http://127.0.0.1:5000/student_select
+
+希望日時の集計一覧
+http://127.0.0.1:5000/view_responses

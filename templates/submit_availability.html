@@ -13,15 +13,17 @@
         <label>名前:</label><br>
         <input type="text" name="name" required><br><br>
 
-        {% for week, day in candidates.items() %}
-            <h3>{{week}}</h3>
+        {% for session, days in candidates.items() %}
+            <h3>{{session}}</h3>
             {% for day, times in days.items() %}
                 <strong>{{day}}</strong><br>
                 {% for time in times %}
-                    <input type="checkbox" name="{{week}}__{{day}}" value="{{time}}">
-                    {{time}}<br>
+                    <label>
+                    <input type="checkbox" name="{{session}}__{{day}}" value="{{time}}">
+                    {{time}}
+                    </label>
                 {% endfor %}
-                <br>
+                <br><br>
             {% endfor %}
         {% endfor %}
 

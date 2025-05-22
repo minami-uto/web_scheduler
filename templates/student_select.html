@@ -1,13 +1,13 @@
 <h1>受講生希望日時選択フォーム</h1>
 
 <form method="POST">
-    {% for week, days in candidates.items() %}
-        <h2>{{week}}</h2>
+    {% for session, days in candidates.items() %}
+        <h2>{{session}}</h2>
         {% for day, times in days.items() %}
             <strong>{{day}}:</strong>
             {% for time in times %}
                 <label>
-                    <input type="checkbox" name="selected_dates" value="{{week}} {{day}} {{time}}">
+                    <input type="checkbox" name="selected_dates" value="{{session}} {{day}} {{time}}">
                     {{time}}
                 </label>
             {% endfor %}
