@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, Response
 import json
 import os
+import io
+import csv
 
 app = Flask(__name__)
 CANDIDATES_FILE = 'candidates.json'
@@ -132,6 +134,42 @@ def view_responses():
                 summary[key].append(name)
 
     return render_template('view_responses.html', summary=summary, responses=responses, candidates=candidates)
+
+@app.route('/export_csv')
+def export_csv():
+    responses = load_responses() #受講生ごとの希望日時の辞書
+    candidates = load_json(CANDIDATES_FILE)
+
+    #日時ごとの希望者数と名前のリストを作成
+    date_counts = {}
+    for name, choices in responses.items():
+        for choice in choices:
+            if choice not in date_counts:
+                date_counts[choice] = []
+            date_counts[choice].append(name)
+    
+    # csvをメモリ上で作成
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    #ヘッダー行
+    writer.writerow(['日時','希望者数','希望者リスト'])
+    for date, names in date_counts.items():
+        writer.writerow([date, len(names), ', '.join(names)])
+
+    writer.writerow([]) #空行
+
+    writer.writerow(['受講生名', '希望日時'])
+    for name, choices in responses.items():
+        writer.writerow([name, ', '.join(choices)])
+
+    #CSVデータ取得
+    csv_data = output.getvalue()
+    output.close()
+
+    #レスポンスとしてCSVファイルを返す
+    return Response(csv_data, mimetype='text/csv', headers={'Content-Disposition': 'attachment;filename=availability_sammary.csv'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
